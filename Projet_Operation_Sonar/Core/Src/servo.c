@@ -57,9 +57,9 @@ void setServoPosition(int position)
 }
 
 /**
- * @brief Fonction pour modifier la position du servo-moteur avec l'appuie sur un bouton pousoir.
+ * @brief Fonction pour modifier la position du servo-moteur avec l'appuie sur un bouton poussoir.
  */
-void loop_servo_buton(void)
+void loop_servo_button(void)
 {
   // État précédent du bouton
   static GPIO_PinState previousButtonState = GPIO_PIN_RESET;
@@ -83,50 +83,6 @@ void loop_servo_buton(void)
     positionPourcentage = 0;
   }
   // Définir la nouvelle position du servo
-  setServoPosition(positionPourcentage);
-}
-
-void loop_servo_send_uart(void){
-  char *message = "Hello, World!\n";
-  HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
-  HAL_Delay(1000);
-}
-
-
-void loop_servo_uart(void){
-  uint8_t data[1];
-  char *message = "Message envoyé!\n";
-  HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
-
-  HAL_UART_Receive(&huart2, data, 1, 1000);
-
-  *message = "Message reçu!\n";
-  HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
-
-  switch(data[0]) {
-    case '1':
-      positionPourcentage = 0;
-      break;
-    case '2':
-      positionPourcentage = 20;
-      break;
-    case '3':
-      positionPourcentage = 40;
-      break;
-    case '4':
-      positionPourcentage = 60;
-      break;
-    case '5':
-      positionPourcentage = 80;
-      break;
-    case '6':
-      positionPourcentage = 100;
-      break;
-    default:
-      // Valeur non reconnue
-      break;
-  }
-
   setServoPosition(positionPourcentage);
 }
 
