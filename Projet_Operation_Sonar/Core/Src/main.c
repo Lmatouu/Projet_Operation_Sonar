@@ -115,6 +115,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
+    // permet de choisir le mode de fonctionnement
     switch (mode)
     {
     case 1:
@@ -184,6 +185,15 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+/**
+ * @brief Fonction de rappel pour l'interruption EXTI du GPIO.
+ * 
+ * Cette fonction est appelée lorsqu'un événement d'interruption se produit sur la broche GPIO spécifiée.
+ * Elle vérifie si l'interruption est déclenchée par la broche BP_USER et met à jour le mode en conséquence.
+ * 
+ * @param GPIO_Pin Le numéro de la broche GPIO qui a déclenché l'interruption.
+ */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   if (GPIO_Pin == BP_USER_Pin)
