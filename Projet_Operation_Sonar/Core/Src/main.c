@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2024 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -26,6 +26,11 @@
 /* USER CODE BEGIN Includes */
 #include "servo.h"
 #include "uart.h"
+#include <stm32f4xx_hal_tim.h>
+#include "ultrasonic.h"
+
+static int mode = 1;
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,20 +97,48 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM4_Init();
   MX_USART2_UART_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, 49997);
+  HAL_TIM_Base_Start(&htim3);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    loop_send_uart();
+
+    switch (mode)
+    {
+    case 1:
+      HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+      loop_received_uart_servo();
+      break;
+    case 2:
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_RESET);
+
+      //int distance= calculateDistance();
+
+      // setServoPosition(distance*4);
+      //char messageDistance[50];
+      //sprintf(memessageDistancessage, "Distance du capteur ultrasons en cm: %c\n", distance);
+      //display_uart_message(messageDistance)
+      break;
+    }
   }
+    // loop_received_uart_servo();
+    //   char *message = "Kilian le plus beau!\n";
+    //   display_uart_message(message);
+
   /* USER CODE END 3 */
 }
 
@@ -151,7 +184,20 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if (GPIO_Pin == BP_USER_Pin)
+  {
+    if (mode == 1)
+    {
+      mode = 2;
+    }
+    else
+    {
+      mode = 1;
+    }
+  }
+}
 /* USER CODE END 4 */
 
 /**

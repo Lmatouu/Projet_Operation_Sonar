@@ -59,8 +59,7 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define BP_USER_Pin GPIO_PIN_0
 #define BP_USER_GPIO_Port GPIOA
-#define TRIG_Pin GPIO_PIN_0
-#define TRIG_GPIO_Port GPIOB
+#define BP_USER_EXTI_IRQn EXTI0_IRQn
 #define ECHO_Pin GPIO_PIN_1
 #define ECHO_GPIO_Port GPIOB
 #define LED_GREEN_Pin GPIO_PIN_12
@@ -71,6 +70,8 @@ void Error_Handler(void);
 #define LED_RED_GPIO_Port GPIOD
 #define LED_BLUE_Pin GPIO_PIN_15
 #define LED_BLUE_GPIO_Port GPIOD
+#define TRIG_Pin GPIO_PIN_8
+#define TRIG_GPIO_Port GPIOA
 #define SERVO_Pin GPIO_PIN_7
 #define SERVO_GPIO_Port GPIOB
 
