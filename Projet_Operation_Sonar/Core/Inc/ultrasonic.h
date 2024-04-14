@@ -3,5 +3,7 @@
 
 // Déclaration des fonctions
 void calculateDistance(void);
+void displayLed(void);
+int getDistance(void);
 
 #endif // ULTRASONIC_H

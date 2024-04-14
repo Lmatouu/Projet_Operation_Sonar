@@ -26,8 +26,10 @@
 /* USER CODE BEGIN Includes */
 #include "servo.h"
 #include "uart.h"
-#include <stm32f4xx_hal_tim.h>
 #include "ultrasonic.h"
+
+#include <stm32f4xx_hal_tim.h>
+#include <stdio.h>
 
 static int mode = 1;
 
@@ -121,24 +123,24 @@ int main(void)
     case 1:
       HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET);
       HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+
       loop_received_uart_servo();
       break;
     case 2:
       HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
       HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_RESET);
 
-      //int distance= calculateDistance();
+      calculateDistance();
 
-      // setServoPosition(distance*4);
-      //char messageDistance[50];
-      //sprintf(memessageDistancessage, "Distance du capteur ultrasons en cm: %c\n", distance);
-      //display_uart_message(messageDistance)
+      int distance= getDistance();
+
+      setServoPosition(distance*4);
+      char messageDistance[50];
+      sprintf(messageDistance, "Distance du capteur ultrasons en cm: %c\n", distance);
+      display_uart_message(messageDistance);
       break;
     }
   }
-    // loop_received_uart_servo();
-    //   char *message = "Kilian le plus beau!\n";
-    //   display_uart_message(message);
 
   /* USER CODE END 3 */
 }

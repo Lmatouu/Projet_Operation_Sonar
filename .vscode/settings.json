@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "tim.h": "c",
-        "system_error": "c"
+        "system_error": "c",
+        "uart.h": "c",
+        "ultrasonic.h": "c"
     }
 }

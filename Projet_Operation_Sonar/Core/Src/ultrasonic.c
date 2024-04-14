@@ -5,14 +5,35 @@
 #include "ultrasonic.h"
 #include <stdio.h>
 
+static int fin = 0;
+static int distance = 0;
+
 void calculateDistance()
 {
-    while (HAL_GPIO_ReadPin(ECHO_GPIO_Port, ECHO_Pin) == GPIO_PIN_RESET);
-    TIM3->CNT = 0;
-    while (HAL_GPIO_ReadPin(ECHO_GPIO_Port, ECHO_Pin) == GPIO_PIN_SET);
-    int fin = TIM3->CNT;
+    // ===== FRONT MONTANT =====
+    if (HAL_GPIO_ReadPin(ECHO_GPIO_Port, ECHO_Pin) == GPIO_PIN_RESET)
+    {
+        TIM3->CNT = 0;
+    }
 
-    float distance = fin / 1000;
+    // ===== FRONT DESCENDANT =====
+    if (HAL_GPIO_ReadPin(ECHO_GPIO_Port, ECHO_Pin) == GPIO_PIN_SET)
+    {
+        fin = TIM3->CNT;
+        // ===== CALCUL DE LA DISTANCE =====
+        distance = fin / 1000;
+    }
+
+    displayLed();
+}
+
+int getDistance()
+{
+    return fin;
+}
+
+void displayLed()
+{
     if (distance < 5 || distance > 25)
     {
         HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
